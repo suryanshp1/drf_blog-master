@@ -41,23 +41,19 @@ class CreatePost(graphene.Mutation):
         created = graphene.types.datetime.DateTime()
         title = graphene.String()
         body = graphene.String()
-        owner = graphene.List(graphene.ID)
+        
     
     post = graphene.Field(PostType)
 
-    def mutate(self, info, created=None, title=None, body=None, owner = None):
+    def mutate(self, info, created=None, title=None, body=None):
+        
+
         post = Post.objects.create(
             created = created,
             title = title,
-            body = body
+            body = body,
+            owner = info.context.user
         )
-
-        if owner is not None:
-            owner_set = []
-            for id in owner:
-                owner_object = Post.objects.get(pk=id)
-                owner_set.append(owner_object)
-            post.owner.set(owner_set)
 
         post.save()
         return CreatePost(post = post)
