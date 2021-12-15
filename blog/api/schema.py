@@ -73,7 +73,7 @@ class UpdatePost(graphene.Mutation):
         post.created = created if created is not None else post.created
         post.title = title if title is not None else post.title
         post.body = body if body is not None else post.body
-        post.owner = owner if owner is not None else post.owner
+        post.owner = owner if owner is not None else info.context.user
 
         if owner is not None:
             owner_set = []
